@@ -16,7 +16,6 @@
 *******************************     1. LOADER
 ******************************************************************/
 $(document).ready(function(){
-     
   $('ul li a').click(function(){
     $('li a').removeClass("active");
     $(this).addClass("active");
@@ -485,59 +484,22 @@ particlesJS("particles-js", {
         };
 
          LPAWS.sendToConnectForm = function() {
-            debugger;
-            $('.submit-btn').prop('disabled', true);
-            $('.submit-btn').css('color','grey');
-            let name  = document.querySelector('#name').value;
-            let message  = document.querySelector('#message').value;
-            let email = document.querySelector('#email').value;
-            if(typeof name != 'undefined' && name != ""  && typeof message != 'undefined' && message != "" && typeof email != 'undefined' && email != ""){
-                var sns = new AWS.SNS();
-                var params = {
-                    //Message: 'Hello topic', /* required */
-                    Message: 'Name: '+ name +'<br/> Message: '+ message,
-                    Subject: 'Hypermine Contact form submission by- '+email,
-                    TopicArn: 'arn:aws:sns:us-east-1:482963721489:com-hypermine-contact-form'
-                };
-                
-                //$('.iloader').css('display', 'block');
-                $('.iloader').fadeIn();
-                sns.publish(params, function(err, data) {
-                    if (err) console.log(err, err.stack); // an error occurred
-                    else{
-                        
-                        $('.iloader').fadeOut();
-                        $('.submit-btn').prop('disabled', false);
-                        $('.submit-btn').css('color','white');
-                        $('.iloader').css('display','none');
-                        $('.vdl').text('Email Sent. We will get back to you soon.');
-                        $('.vdl').css('display', 'block');
-                        $('.vdl').css('color', '#23bd02');
-                        $('.vdl').css('text-align', 'center');
-                        document.querySelector('#name').value =''
-                        document.querySelector('#email').value =''
-                        document.querySelector('#message').value =''
-                        setTimeout(hideValidationDiv, 2000);
-                    }            // successful response
-                });
-            }else{
-                //alert('All fields are mandatory!');
-                $('.vdl').text('All fields are mandatory.');
-                $('.vdl').css('display', 'block');
-                $('.vdl').css('color', 'red');
-                $('.vdl').css('text-align', 'center');
-                $('.iloader').fadeOut();
-                $('.submit-btn').prop('disabled', false);
-                $('.submit-btn').css('color','white');
-                setTimeout(hideValidationDiv, 2000);
-            }
-
-            
-           
-        };
-        
-        var hideValidationDiv = function () {
-            $(".vdl").fadeOut();
+            var sns = new AWS.SNS();
+            var params = {
+                //Message: 'Hello topic', /* required */
+                Message: 'Name: '+document.querySelector('#name').value+'<br/> Message: '+document.querySelector('#message').value,
+                Subject: 'Hypermine Contact form submission by- '+document.querySelector('#email').value,
+                TopicArn: 'arn:aws:sns:us-east-1:482963721489:com-hypermine-contact-form'
+            };
+            sns.publish(params, function(err, data) {
+                if (err) console.log(err, err.stack); // an error occurred
+                else   {
+                    alert('Email Sent!'); 
+                    document.querySelector('#name').value =''
+                    document.querySelector('#email').value =''
+                    document.querySelector('#message').value =''
+                }            // successful response
+            });
         };
 /******************************************************************
 *******************************     5. GALLERY
